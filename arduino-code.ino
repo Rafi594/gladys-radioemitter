@@ -30,6 +30,9 @@
 #include <NewRemoteReceiver.h>
 #include <NewRemoteTransmitter.h>
 #include <InterruptChain.h>
+#include <RCSwitch.h>
+
+RCSwitch mySwitch = RCSwitch();
 
 void SendRadioCode(long code) {
 
@@ -151,6 +154,18 @@ void setup() {
 }
 
 void loop() {
+    if (mySwitch.available()) {
+    int value = mySwitch.getReceivedValue();
+    
+    if (value == 0) {
+      Serial.print("Unknown encoding");
+    } else {
+      Serial.print("{\"action\":\"received\",\"value\":");
+      Serial.print( mySwitch.getReceivedValue() );
+      Serial.println("}");
+    }
+    delay(200); 
+mySwitch.resetAvailable();
   // You can do other stuff here!
 }
 
